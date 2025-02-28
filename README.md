@@ -79,7 +79,3 @@ For example:
 ```bash
 REACT_APP_API_URL=https://my-backend.onrender.com/api
 ```
-
-## License
-
-Choose a license for your project (e.g., MIT, Apache, etc.) and include a `LICENSE` file, or specify it here.
