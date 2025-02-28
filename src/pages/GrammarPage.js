@@ -1,41 +1,42 @@
-import React, { useState } from "react";
+// src/pages/GrammarPage.js
+import React, { useState, useEffect } from "react";
 import { Container, TextField, Typography } from "@mui/material";
-import api from "../services/apiService";
+import api from "../services/apiService"; // your axios instance
 import HighlightedText from "../components/HighlightedText";
+const useDebounce = require("../hooks/useDebounce");
 
 export default function GrammarPage() {
   const [inputText, setInputText] = useState("");
-  const [tokens, setTokens] = useState([]);
+  const [incorrectTokens, setIncorrectTokens] = useState([]);
 
-  const handleCheckGrammar = async (text) => {
-    if (!text.trim()) {
-      setTokens([]);
-      return;
-    }
-    try {
-      const response = await api.post("/grammar/check", { text });
-      if (response.data.success) {
-        setTokens(response.data.data.tokens);
+  // Debounce so we don't spam the API
+  const debouncedText = useDebounce(inputText, 750);
+
+  useEffect(() => {
+    async function handleCheckGrammar(text) {
+      if (!text.trim()) {
+        setIncorrectTokens([]);
+        return;
       }
-    } catch (err) {
-      console.error("Error checking grammar:", err);
+      try {
+        const res = await api.post("/grammar/check", { text });
+        if (res.data.success) {
+          setIncorrectTokens(res.data.data.incorrectTokens || []);
+        }
+      } catch (err) {
+        console.error("Error checking grammar:", err);
+      }
     }
-  };
-
-  const handleChange = (e) => {
-    const text = e.target.value;
-    setInputText(text);
-    handleCheckGrammar(text);
-  };
+    handleCheckGrammar(debouncedText);
+  }, [debouncedText]);
 
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h5" gutterBottom>
         Live Preview (Incorrect words in red):
       </Typography>
-      <HighlightedText tokens={tokens} />
-
-      <TextField label="Enter text" multiline rows={6} fullWidth variant="outlined" margin="normal" value={inputText} onChange={handleChange} />
+      <HighlightedText text={inputText} incorrectTokens={incorrectTokens} />
+      <TextField label="Enter text" multiline rows={6} fullWidth value={inputText} onChange={(e) => setInputText(e.target.value)} />
     </Container>
   );
 }

@@ -1,19 +1,26 @@
+// src/components/HighlightedText.js
 import React from "react";
 import { Typography } from "@mui/material";
 
-export default function HighlightedText({ tokens }) {
-  if (!tokens || tokens.length === 0) {
-    return <Typography variant="body1">No text preview</Typography>;
+/**
+ * text: string (user input text)
+ * incorrectTokens: { index, original, suggestion }[]
+ */
+export default function HighlightedText({ text, incorrectTokens }) {
+  if (!text.trim()) {
+    return <Typography>No text preview</Typography>;
   }
+  const words = text.split(/\s+/);
 
   return (
-    <Typography variant="body1">
-      {tokens.map((item, idx) => {
-        const style = item.isCorrect ? {} : { color: "red", fontWeight: "bold" };
+    <Typography>
+      {words.map((word, i) => {
+        const isIncorrect = incorrectTokens.some((t) => t.index === i);
+        const style = isIncorrect ? { color: "red", fontWeight: "bold" } : {};
 
         return (
-          <span key={idx} style={style}>
-            {item.token + " "}
+          <span key={i} style={style}>
+            {word + " "}
           </span>
         );
       })}

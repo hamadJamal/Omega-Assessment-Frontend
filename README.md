@@ -1,70 +1,85 @@
-# Getting Started with Create React App
+# Grammar Correction Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+This is the **React + MUI** frontend for the grammar-correction app.  
+It features:
 
-In the project directory, you can run:
+- A **Login** page to obtain a JWT for authorization.
+- A **Grammar** page where the user can type text; incorrect words are highlighted in **red**.
+- **Logout** functionality to clear the token and return to the login screen.
 
-### `npm start`
+## Key Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **Login & Logout flow:**
+   - Stores JWT in `localStorage`.
+   - Protects the `/grammar` page.
+2. **Grammar Check:**
+   - Debounces user input for ~750ms (via a custom `useDebounce` hook) to minimize API calls.
+   - Sends the typed text to the backend, receives a list of incorrect tokens, and **highlights** those tokens in red.
+3. **Material UI** for a minimal and clean user interface.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Prerequisites
 
-### `npm test`
+- **Node.js** (for local development)
+- **npm** or **yarn**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Setup & Installation
 
-### `npm run build`
+1. **Clone** this repository (the frontend) from your version control system.
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Configure API URL:**
+   By default, in `apiService.js`:
+   ```javascript
+   const api = axios.create({
+     baseURL: process.env.REACT_APP_API_URL || "http://localhost:4000/api",
+   });
+   ```
+   If your backend is deployed elsewhere, update `REACT_APP_API_URL` in `.env` or modify the code to match your deployed backend endpoint.
+4. **Run the React app in development mode:**
+   ```bash
+   npm start
+   ```
+   The app will run at `http://localhost:3000`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## High-Level Flow
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Login page (`/login`):
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- User enters username and password.
+- On success, JWT is saved in `localStorage`, and the user is redirected to `/grammar`.
 
-### `npm run eject`
+### Grammar page:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- User types text in a multiline text field.
+- After 750ms of no typing, the text is sent to the backend.
+- The backend returns an array of incorrect tokens (with `index`, `original`, `suggestion`).
+- The frontend highlights those tokens in red by matching indexes to the split words in the user’s typed text.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Logout page:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Clears the JWT and redirects to `/login`.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Usage
 
-## Learn More
+1. Navigate to `http://localhost:3000/login`.
+2. Login using credentials (e.g., `admin` / `1234`).
+3. Enter text on `/grammar`. Watch incorrect words highlighted in red above the text field.
+4. Logout via the top navigation to clear the token and return to the login page.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Deployment
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Deploy to **Netlify**, **Vercel**, or similar.  
+Ensure your `.env` file or the `apiService.js` `baseURL` points to the live backend.
+For example:
 
-### Code Splitting
+```bash
+REACT_APP_API_URL=https://my-backend.onrender.com/api
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## License
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Choose a license for your project (e.g., MIT, Apache, etc.) and include a `LICENSE` file, or specify it here.
