@@ -15,7 +15,7 @@ export default function GrammarPage() {
       <Navbar />
       <Container maxWidth="md" sx={{ mt: 14 }}>
         <Typography variant="h5" gutterBottom>
-          Live Preview (Incorrect words in red):
+          Live Preview (Misspelled words in red):
         </Typography>
         <HighlightedText text={inputText} incorrectTokens={incorrectTokens} />
         <TextField label="Enter text" multiline rows={6} fullWidth value={inputText} onChange={(e) => setInputText(e.target.value)} sx={{ mt: 4 }} />
