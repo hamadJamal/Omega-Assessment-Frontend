@@ -1,4 +1,4 @@
-# Grammar Correction Frontend
+# Spelling Correction Frontend
 
 ## Overview
 
