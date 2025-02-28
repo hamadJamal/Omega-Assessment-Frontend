@@ -2,10 +2,6 @@
 import React from "react";
 import { Typography } from "@mui/material";
 
-/**
- * text: string (user input text)
- * incorrectTokens: { index, original, suggestion }[]
- */
 export default function HighlightedText({ text, incorrectTokens }) {
   if (!text.trim()) {
     return <Typography>No text preview</Typography>;

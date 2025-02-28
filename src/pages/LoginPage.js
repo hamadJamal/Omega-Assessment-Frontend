@@ -15,7 +15,6 @@ export default function LoginPage() {
     if (!result.success) {
       setErrorMsg(result.error.message);
     } else {
-      // redirect to grammar page
       window.location.href = "/grammar";
     }
   };
@@ -29,7 +28,7 @@ export default function LoginPage() {
         <TextField label="Username" fullWidth margin="normal" value={username} onChange={(e) => setUsername(e.target.value)} />
         <TextField label="Password" type="password" fullWidth margin="normal" value={password} onChange={(e) => setPassword(e.target.value)} />
         {errorMsg && <Typography color="error">{errorMsg}</Typography>}
-        <Button variant="contained" color="primary" type="submit">
+        <Button variant="contained" color="primary" type="submit" sx={{ mt: 2 }}>
           Login
         </Button>
       </form>
